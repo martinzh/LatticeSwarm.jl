@@ -25,3 +25,4 @@ scatter(x_pos, y_pos, leg = false)
 pos = sparse(x_pos, y_pos, ones(N))
 
 rowvals(pos)
+nzrange(pos, 1)
