@@ -96,11 +96,6 @@ end
 
 ### ================================== ###
 
-# using Plots
-# gr()
-
-### ================================== ###
-
 # bias intensity
 ϵ = parse(Float64, ARGS[1])
 rep = parse(Int, ARGS[2])
@@ -108,13 +103,11 @@ rep = parse(Int, ARGS[2])
 # number of walkers
 N = 1024
 
-# rep = 2
-
 # initial density
 ρ_0 = 0.1
 
 # time steps
-T = convert(Int, exp10(4))
+T = convert(Int, exp10(3))
 
 ### ================================== ###
 # transition probabilities
@@ -126,10 +119,6 @@ L = convert(Int, ceil(N/ρ_0))
 
 # inital particles' positions
 pos = [rand(1:L) for i in 1:N]
-
-### ================================== ###
-
-# scatter(fill(1, N), pos)
 
 ### ================================== ###
 
@@ -153,41 +142,3 @@ end
 close(pos_file)
 
 ### ================================== ###
-
-# raw_data = reinterpret(Int, read("$(homedir())/GitRepos/LatticeSwarm.jl//pos_$(rep).dat"))
-# pos_data = transpose(reshape(raw_data, 2N, div(length(raw_data),2N)))
-#
-#
-# x = view(pos_data, :, 1:2:2N)
-# y = view(pos_data, :, 2:2:2N)
-#
-# plot(x,y, leg = false, xlabel = "x", ylabel = "y")
-# plot(x,y, leg = false, xlabel = "x", ylabel = "y", lw = 2.5)
-
-### ================================== ###
-
-# raw_data = reinterpret(Int, read("$(homedir())/GitRepos/LatticeSwarm.jl//pos_1D_$(rep).dat"))
-# pos_data = transpose(reshape(raw_data, N, div(length(raw_data),N)))
-
-# transpose(pos_data)
-
-### ================================== ###
-
-# part_plot = scatter(x_pos, y_pos, leg = false, xlabel = "x", ylabel = "y", ms = 4)
-# border_plot = scatter(xlabel = "x", ylabel = "y")
-#
-# for i in 1:2
-#     scatter!(border_plot, hcat(bounds[i]...)[1,:], hcat(bounds[i]...)[2,:], leg = false, ms = 4)
-# end
-#
-# plot(part_plot, border_plot, layout = @layout [a b])
-
-### ================================== ###
-
-# times = fill(1, (N, T))
-#
-# for i in 1:T
-#     times[:, i] = i
-# end
-#
-# scatter(times, transpose(pos_data), leg =   false)
