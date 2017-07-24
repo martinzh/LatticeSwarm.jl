@@ -138,8 +138,9 @@ output_path = "$(homedir())/art_DATA/LS_1D"
 make_dir_from_path(output_path)
 make_dir_from_path(output_path*"/DATA")
 make_dir_from_path(output_path*"/DATA/data_N_$(N)")
+make_dir_from_path(output_path*"/DATA/data_N_$(N)/data_e_$(ϵ)")
 
-pos_file = open(output_path * "/DATA/data_N_$(N)/pos_$(rep).dat", "w+")
+pos_file = open(output_path * "/DATA/data_N_$(N)/data_e_$(ϵ)/pos_$(rep).dat", "w+")
 
 for i in 1:T
     println(i)
