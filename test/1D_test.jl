@@ -1,7 +1,7 @@
 ### ============== ### ============== ###
 ## Collective Motion in Lattice Systems 1D
 ## Martin Zumaya Hernandez
-## 05 / 2017
+## 08 / 2017
 ### ============== ### ============== ###
 
 ### ================================== ###
@@ -96,7 +96,6 @@ end
 
 ### ================================== ###
 
-# bias intensity
 N = parse(Int, ARGS[1])
 ϵ = parse(Float64, ARGS[2])
 T = parse(Int, ARGS[3]) # integration time steps
@@ -169,3 +168,9 @@ for i in 1:(length(times) - 1)
 end
 
 close(pos_file)
+
+### ================================== ###
+
+println("Done")
+
+### ================================== ###
