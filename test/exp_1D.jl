@@ -15,10 +15,13 @@ end
 
 ### ================================== ###
 
-N = 1024
+N = parse(Int, ARGS[1])
+ϵ = ARGS[2]
+
+#N = 1024
+# N = 256
 # ϵ = "0.0"
-ϵ = ARGS[1]
-T = convert(Int, exp10(3))
+T = convert(Int, exp10(2))
 
 ## ================================== ###
 
@@ -37,7 +40,7 @@ data_path = output_path * "/DATA/data_N_$(N)/data_e_$(ϵ)"
 
 files = readdir(data_path)
 
-r = zeros(T, length(files))
+r = zeros(Int, T, length(files))
 
 ## ================================== ###
 

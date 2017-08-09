@@ -1,5 +1,5 @@
 ### ============== ### ============== ###
-## Collective Motion in Lattice Systems
+## Collective Motion in Lattice Systems 1D
 ## Martin Zumaya Hernandez
 ## 05 / 2017
 ### ============== ### ============== ###
@@ -97,28 +97,10 @@ end
 ### ================================== ###
 
 # bias intensity
-ϵ = parse(Float64, ARGS[1])
-rep = parse(Int, ARGS[2])
-
-# number of walkers
-N = 1024
-
-# initial density
-ρ_0 = 0.1
-
-# time steps
-T = convert(Int, exp10(3))
-
-### ================================== ###
-# transition probabilities
-trans_prob = [ cumsum(fill(1./3., 3)), cumsum([(1.-ϵ)/3., 1./3., (1.+ϵ)/3.]) ]
-
-### ================================== ###
-# initalization space
-L = convert(Int, ceil(N/ρ_0))
-
-# inital particles' positions
-pos = [rand(1:L) for i in 1:N]
+N = parse(Int, ARGS[1])
+ϵ = parse(Float64, ARGS[2])
+T = parse(Int, ARGS[3]) # integration time steps
+rep = parse(Int, ARGS[4])
 
 ### ================================== ###
 
@@ -131,14 +113,59 @@ make_dir_from_path(output_path*"/DATA/data_N_$(N)/data_e_$(ϵ)")
 
 pos_file = open(output_path * "/DATA/data_N_$(N)/data_e_$(ϵ)/pos_$(rep).dat", "w+")
 
-for i in 1:T
-    println(i)
-    # write(pos_file, vcat(pos...))
-    write(pos_file, pos)
-    sys_step(pos, trans_prob)
-    # println(pos)
+### ================================== ###
+# number of walkers
+# N = 256
+
+# initial density
+ρ_0 = 2.0
+
+# time steps
+# T = convert(Int, exp10(2))
+
+### ================================== ###
+# transition probabilities
+trans_prob = [ cumsum(fill(1./3., 3)), cumsum([(1.-ϵ)/3., 1./3., (1.+ϵ)/3.]) ]
+
+### ================================== ###
+# initalization space
+L = convert(Int, ceil(N/ρ_0))
+
+# inital particles' positions
+pos = rand(1:L, N)
+
+### ================================== ###
+
+times = [convert(Int, exp10(i)) for i in 0:T]
+
+for i in 1:(length(times) - 1)
+
+    if i > 1
+
+        for t in (times[i]+1):times[i+1]
+
+            sys_step(pos, trans_prob)
+
+            if t % times[i] == 0 || t % times[i-1] == 0
+                println("//////// ", t)
+                write(pos_file, pos)
+            end
+        end
+
+    else
+
+        for t in (times[i]+1):times[i+1]
+
+            sys_step(pos, trans_prob)
+
+            if t % times[i] == 0
+                println("//////// ", t)
+                write(pos_file, pos)
+            end
+        end
+
+    end
+
 end
 
 close(pos_file)
-
-### ================================== ###
