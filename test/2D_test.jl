@@ -261,11 +261,11 @@ N = parse(Int, ARGS[1])
 T = parse(Int, ARGS[3]) # integration time steps
 rep = parse(Int, ARGS[4])
 
-N = 256
-ϵ_v = 0.0
-# ϵ_h = parse(Float64, ARGS[2])
-T = 3
-rep = 1
+# N = 256
+# ϵ_v = 0.0
+# # ϵ_h = parse(Float64, ARGS[2])
+# T = 3
+# rep = 1
 
 # bias intensity
 # ϵ_v = 1.0
