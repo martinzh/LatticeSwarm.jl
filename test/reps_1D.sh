@@ -9,14 +9,14 @@ do
     time nohup julia 1D_test.jl $N $e $T $i &
 done
 
-sleep 1m
+wait
 
 for i in {21..40}
 do
     time nohup julia 1D_test.jl $N $e $T $i &
 done
 
-sleep 1m
+wait
 
 for i in {41..60}
 do
