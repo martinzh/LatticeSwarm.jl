@@ -251,8 +251,6 @@ function sys_step(pos, trans_prob, bounds)
 
 end
 
-sys_step(pos, trans_prob, bounds)
-
 ### ================================== ###
 
 N = parse(Int, ARGS[1])
