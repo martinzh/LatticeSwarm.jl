@@ -63,22 +63,22 @@ function get_bounds(pos, bounds)
     bounds[1], bounds[2] = get_lr_bounds(pos)
     bounds[3], bounds[4] = get_ud_bounds(pos)
 
-    bounds[5] = intersect(bounds[1], bounds[3])
-    bounds[6] = intersect(bounds[1], bounds[4])
-    bounds[7] = intersect(bounds[2], bounds[3])
-    bounds[8] = intersect(bounds[2], bounds[4])
-
-    deleteat!(bounds[1], findin(bounds[1],bounds[5]))
-    deleteat!(bounds[3], findin(bounds[3],bounds[5]))
-
-    deleteat!(bounds[1], findin(bounds[1],bounds[6]))
-    deleteat!(bounds[4], findin(bounds[4],bounds[6]))
-
-    deleteat!(bounds[2], findin(bounds[2],bounds[7]))
-    deleteat!(bounds[3], findin(bounds[3],bounds[7]))
-
-    deleteat!(bounds[2], findin(bounds[2],bounds[8]))
-    deleteat!(bounds[4], findin(bounds[4],bounds[8]))
+    # bounds[5] = intersect(bounds[1], bounds[3])
+    # bounds[6] = intersect(bounds[1], bounds[4])
+    # bounds[7] = intersect(bounds[2], bounds[3])
+    # bounds[8] = intersect(bounds[2], bounds[4])
+    #
+    # deleteat!(bounds[1], findin(bounds[1],bounds[5]))
+    # deleteat!(bounds[3], findin(bounds[3],bounds[5]))
+    #
+    # deleteat!(bounds[1], findin(bounds[1],bounds[6]))
+    # deleteat!(bounds[4], findin(bounds[4],bounds[6]))
+    #
+    # deleteat!(bounds[2], findin(bounds[2],bounds[7]))
+    # deleteat!(bounds[3], findin(bounds[3],bounds[7]))
+    #
+    # deleteat!(bounds[2], findin(bounds[2],bounds[8]))
+    # deleteat!(bounds[4], findin(bounds[4],bounds[8]))
 end
 
 ### ================================== ###
@@ -240,13 +240,66 @@ end
 
 ### ================================== ###
 
+function update_pos_1(p, trans_prob, bounds)
+
+    if p in bounds[1]
+
+        if p in bounds[3]
+            # print("$(p)\tLOWER LEFT\t")
+            update_corner(p, -1, -1, trans_prob)
+        elseif p in bounds[4]
+            # print("$(p)\tUPPER LEFT\t")
+            update_corner(p, 1, -1, trans_prob)
+        else
+            # print("$(p)\tLEFT\t")
+            update_bound(p, 'h', -1, trans_prob)
+        end
+        # println(p)
+
+    elseif p in bounds[2]
+
+        if p in bounds[3]
+            # print("$(p)\tLOWER RIGHT\t")
+            update_corner(p, -1, 1, trans_prob)
+        elseif p in bounds[4]
+            # print("$(p)\tUPPER RIGHT\t")
+            update_corner(p, 1, 1, trans_prob)
+        else
+            # print("$(p)\tRIGHT\t")
+            update_bound(p, 'h', 1, trans_prob)
+        end
+        # println(p)
+
+    elseif in(p, bounds[3]) && !in(p, bounds[1]) && !in(p, bounds[2])
+
+        # print("$(p)\tDOWN\t")
+        update_bound(p, 'v', -1, trans_prob)
+        # println(p)
+
+    elseif in(p, bounds[4]) && !in(p, bounds[1]) && !in(p, bounds[2])
+
+        # print("$(p)\tUP\t")
+        update_bound(p, 'v', 1, trans_prob)
+        # println(p)
+
+    else
+        # print("$(p)\tBULK\t")
+        update_bulk(p, trans_prob)
+        # println(p)
+    end
+
+end
+
+### ================================== ###
+
 function sys_step(pos, trans_prob, bounds)
 
     get_bounds(pos, bounds)
     # map(p -> update_pos(p, trans_prob, bounds), pos)
     for i in 1:length(pos)
         # pos[i] = update_pos(pos[i], trans_prob, bounds)
-        update_pos(pos[i], trans_prob, bounds)
+        # update_pos(pos[i], trans_prob, bounds)
+        update_pos_1(pos[i], trans_prob, bounds)
     end
 
 end
@@ -318,7 +371,8 @@ pos = [[rand(1:L), rand(1:L)] for i in 1:N]
 # 6 -> upper left corner
 # 7 -> lower right corner
 # 8 -> upper right corner
-bounds = Vector{Vector{Array{Int64,1}}}(8)
+# bounds = Vector{Vector{Array{Int64,1}}}(8)
+bounds = Vector{Vector{Array{Int64,1}}}(4)
 
 ### ================================== ###
 
@@ -333,7 +387,7 @@ for i in 1:(length(times) - 1)
             sys_step(pos, trans_prob, bounds)
 
             if t % times[i] == 0 || t % times[i-1] == 0
-                println("//////// ", t)
+                # println("//////// ", t)
                 write(pos_file, vcat(pos...))
             end
         end
@@ -345,7 +399,7 @@ for i in 1:(length(times) - 1)
             sys_step(pos, trans_prob, bounds)
 
             if t % times[i] == 0
-                println("//////// ", t)
+                # println("//////// ", t)
                 write(pos_file, vcat(pos...))
             end
         end
