@@ -1,3 +1,5 @@
+using CollectiveDynamics.DataAnalysis
+
 ### ================================== ###
 function make_dir_from_path(path)
 
@@ -24,6 +26,8 @@ N = parse(Int, ARGS[2])
 # ϵ = "0.0"
 T = convert(Int, exp10(6))
 
+times = get_times(T)
+
 ## ================================== ###
 
 output_path = "$(homedir())/art_DATA/$(folder)"
@@ -44,7 +48,7 @@ data_path = output_path * "/DATA/data_N_$(N)/data_e_$(ϵ)"
 
 files = readdir(data_path)
 
-r     = zeros(Int, T, length(files))
+r     = zeros(Int, length(times), length(files))
 i_pos = zeros(Int, N, length(files))
 f_pos = zeros(Int, N, length(files))
 
