@@ -24,7 +24,7 @@ N = parse(Int, ARGS[2])
 #N = 1024
 # N = 256
 # ϵ = "0.0"
-T = convert(Int, exp10(6))
+T = 6
 
 times = get_times(T)
 
