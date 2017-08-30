@@ -17,7 +17,7 @@ end
 
 folder = ARGS[1]
 N = parse(Int, ARGS[2])
-ϵ = ARGS[2]
+ϵ = ARGS[3]
 
 #N = 1024
 # N = 256
