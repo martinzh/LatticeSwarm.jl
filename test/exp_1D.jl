@@ -15,17 +15,19 @@ end
 
 ### ================================== ###
 
-N = parse(Int, ARGS[1])
+folder = ARGS[1]
+N = parse(Int, ARGS[2])
 ϵ = ARGS[2]
 
 #N = 1024
 # N = 256
 # ϵ = "0.0"
-T = convert(Int, exp10(2))
+T = convert(Int, exp10(6))
 
 ## ================================== ###
 
-output_path = "$(homedir())/art_DATA/LS_1D"
+output_path = "$(homedir())/art_DATA/$(folder)"
+# output_path = "$(homedir())/art_DATA/LS_1D"
 
 make_dir_from_path(output_path)
 make_dir_from_path(output_path*"/EXP")
