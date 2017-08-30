@@ -56,6 +56,7 @@ f_pos = zeros(Int, N, length(files))
 
 # rep = 1
 for rep in 1:length(files)
+    println(rep)
     raw_data = reinterpret(Int, read(data_path*"/pos_$(rep).dat"))
     pos_data = reshape(raw_data, N, div(length(raw_data),N))
 
