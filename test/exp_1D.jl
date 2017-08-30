@@ -35,6 +35,8 @@ make_dir_from_path(output_path*"/EXP/data_N_$(N)")
 make_dir_from_path(output_path*"/EXP/data_N_$(N)/data_e_$(ϵ)")
 
 output_file = open(output_path*"/EXP/data_N_$(N)/data_e_$(ϵ)/exp_data_N_$(N)_e_$(ϵ).dat", "w+")
+i_pos_file = open(output_path*"/EXP/data_N_$(N)/data_e_$(ϵ)/i_pos_data_N_$(N)_e_$(ϵ).dat", "w+")
+f_pos_file = open(output_path*"/EXP/data_N_$(N)/data_e_$(ϵ)/f_pos_data_N_$(N)_e_$(ϵ).dat", "w+")
 
 ## ================================== ###
 
@@ -42,7 +44,9 @@ data_path = output_path * "/DATA/data_N_$(N)/data_e_$(ϵ)"
 
 files = readdir(data_path)
 
-r = zeros(Int, T, length(files))
+r     = zeros(Int, T, length(files))
+i_pos = zeros(Int, N, length(files))
+f_pos = zeros(Int, N, length(files))
 
 ## ================================== ###
 
@@ -52,10 +56,18 @@ for rep in 1:length(files)
     pos_data = reshape(raw_data, N, div(length(raw_data),N))
 
     r[:,rep] = [maximum(pos_data[:,i]) - minimum(pos_data[:,i]) for i in 1:size(pos_data,2)]
+
+    i_pos[:, rep] = pos_data[:, 1]
+    f_pos[:, rep] = pos_data[:, end]
 end
 
 write(output_file, r)
+write(i_pos_file, i_pos)
+write(f_pos_file, f_pos)
+
 close(output_file)
+close(i_pos_file)
+close(f_pos_file)
 
 println("Done")
 ## ================================== ###
