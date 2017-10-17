@@ -1,24 +1,8 @@
 #!/bin/bash
 
-N="$1"
-e="$2"
-T="$3"
+e="$1"
 
-for i in {1..20}
+for i in {1..10}
 do
-    time nohup julia 1D_test.jl $N $e $T $i &
-done
-
-wait
-
-for i in {21..40}
-do
-    time nohup julia 1D_test.jl $N $e $T $i &
-done
-
-wait
-
-for i in {41..60}
-do
-    time nohup julia 1D_test.jl $N $e $T $i &
+    time nohup julia 1D_test.jl $e $i &
 done
