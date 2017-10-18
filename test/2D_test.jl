@@ -22,18 +22,19 @@ end
 function get_lr_bounds(pos)
 
     l_bound = Vector{Int}[]
-    h_bound = Vector{Int}[]
+    r_bound = Vector{Int}[]
 
     #possible y values
     y_vals = unique(hcat(pos...)[2,:])
 
     for y in y_vals
-        x = extrema([pos[i][1] for i in find(x -> x[2] == y, pos)])
+        x = extrema([pos[i][1] for i in find(p -> p[2] == y, pos)])
         push!(l_bound, [x[1], y])
-        push!(h_bound, [x[2], y])
+        push!(r_bound, [x[2], y])
     end
 
-    return l_bound, h_bound
+    # return l_bound, r_bound
+    return unique(l_bound), unique(r_bound)
 end
 
 ### ================================== ###
@@ -48,12 +49,13 @@ function get_ud_bounds(pos)
     x_vals = unique(hcat(pos...)[1,:])
 
     for x in x_vals
-        y = extrema([pos[i][2] for i in find(y -> y[1] == x, pos)])
-        push!(u_bound, [x, y[1]])
-        push!(d_bound, [x, y[2]])
+        y = extrema([pos[i][2] for i in find(p -> p[1] == x, pos)])
+        push!(d_bound, [x, y[1]])
+        push!(u_bound, [x, y[2]])
     end
 
-    return u_bound, d_bound
+    # return d_bound, u_bound
+    return unique(d_bound), unique(u_bound)
 end
 
 ### ================================== ###
@@ -87,23 +89,23 @@ function update_bulk(pos, trans_prob)
     p = rand()
 
     # print("move\t")
-    if findfirst( x -> p <= x, trans_prob[2]) == 1
+    if findfirst( x -> p <= x, trans_prob[1]) == 1
         # print("L\t")
         pos[1] -= 1
 
-    elseif findfirst( x -> p <= x, trans_prob[2]) == 2
+    elseif findfirst( x -> p <= x, trans_prob[1]) == 2
         # print("R\t")
         pos[1] += 1
 
-    elseif findfirst( x -> p <= x, trans_prob[2]) == 3
+    elseif findfirst( x -> p <= x, trans_prob[1]) == 3
         # print("U\t")
         pos[2] -= 1
 
-    elseif findfirst( x -> p <= x, trans_prob[2]) == 4
+    elseif findfirst( x -> p <= x, trans_prob[1]) == 4
         # print("D\t")
         pos[2] += 1
 
-    # elseif findfirst( x -> p <= x, trans_prob[2]) == 5
+    # elseif findfirst( x -> p <= x, trans_prob[1]) == 5
         # print("C\t")
 
     end
@@ -116,22 +118,22 @@ function update_corner(pos, d_h, d_v, trans_prob)
     p = rand()
 
     # print("MOVE\t")
-    if findfirst( x -> p < x, trans_prob[4]) == 1
+    if findfirst( x -> p <= x, trans_prob[4]) == 1
         # print("OUT H\t")
         pos[1] += d_h*(1)
 
-    elseif findfirst( x -> p < x, trans_prob[4]) == 2
-        # print("IN H\t")
-        pos[1] += d_h*(-1)
-
-    # elseif findfirst( x -> p < x, trans_prob[4]) == 3
-        # print("C\t")
-
-    elseif findfirst( x -> p < x, trans_prob[4]) == 4
+    elseif findfirst( x -> p <= x, trans_prob[4]) == 2
         # print("OUT V\t")
         pos[2] += d_v*(1)
 
-    elseif findfirst( x -> p < x, trans_prob[4]) == 5
+    # elseif findfirst( x -> p <= x, trans_prob[4]) == 3
+        # print("C\t")
+
+    elseif findfirst( x -> p <= x, trans_prob[4]) == 4
+        # print("IN V\t")
+        pos[1] += d_h*(-1)
+
+    elseif findfirst( x -> p <= x, trans_prob[4]) == 5
         # print("IN V\t")
         pos[2] += d_v*(-1)
 
@@ -146,22 +148,22 @@ function update_bound(pos, b, dir, trans_prob)
 
     if b == 'h'
         # print("MOVE\t")
-        if findfirst( x -> p < x, trans_prob[2]) == 1
+        if findfirst( x -> p <= x, trans_prob[2]) == 1
             # print("OUT\t")
             pos[1] += dir*(1)
 
-        elseif findfirst( x -> p < x, trans_prob[2]) == 2
+        elseif findfirst( x -> p <= x, trans_prob[2]) == 2
             # print("U\t")
             pos[2] += 1
 
-        # elseif findfirst( x -> p < x, trans_prob[2]) == 3
+        # elseif findfirst( x -> p <= x, trans_prob[2]) == 3
         #     print("C\t")
 
-        elseif findfirst( x -> p < x, trans_prob[2]) == 4
+        elseif findfirst( x -> p <= x, trans_prob[2]) == 4
             # print("D\t")
             pos[2] -= 1
 
-        elseif findfirst( x -> p < x, trans_prob[2]) == 5
+        elseif findfirst( x -> p <= x, trans_prob[2]) == 5
             # print("IN\t")
             pos[1] += dir*(-1)
 
@@ -170,22 +172,22 @@ function update_bound(pos, b, dir, trans_prob)
     elseif b == 'v'
 
         # print("MOVE\t")
-        if findfirst( x -> p < x, trans_prob[3]) == 1
+        if findfirst( x -> p <= x, trans_prob[3]) == 1
             # print("OUT\t")
             pos[2] += dir*(1)
 
-        elseif findfirst( x -> p < x, trans_prob[3]) == 2
+        elseif findfirst( x -> p <= x, trans_prob[3]) == 2
             # print("L\t")
-            pos[1] -= 1
-
-        # elseif findfirst( x -> p < x, trans_prob[3]) == 3
-            # print("C\t")
-
-        elseif findfirst( x -> p < x, trans_prob[3]) == 4
-            # print("R\t")
             pos[1] += 1
 
-        elseif findfirst( x -> p < x, trans_prob[3]) == 5
+        # elseif findfirst( x -> p <= x, trans_prob[3]) == 3
+            # print("C\t")
+
+        elseif findfirst( x -> p <= x, trans_prob[3]) == 4
+            # print("R\t")
+            pos[1] -= 1
+
+        elseif findfirst( x -> p <= x, trans_prob[3]) == 5
             # print("IN\t")
             pos[2] += dir*(-1)
 
@@ -249,7 +251,7 @@ function update_pos_1(p, trans_prob, bounds)
             update_corner(p, -1, -1, trans_prob)
         elseif p in bounds[4]
             # print("$(p)\tUPPER LEFT\t")
-            update_corner(p, 1, -1, trans_prob)
+            update_corner(p, -1, 1, trans_prob)
         else
             # print("$(p)\tLEFT\t")
             update_bound(p, 'h', -1, trans_prob)
@@ -260,7 +262,7 @@ function update_pos_1(p, trans_prob, bounds)
 
         if p in bounds[3]
             # print("$(p)\tLOWER RIGHT\t")
-            update_corner(p, -1, 1, trans_prob)
+            update_corner(p, 1, -1, trans_prob)
         elseif p in bounds[4]
             # print("$(p)\tUPPER RIGHT\t")
             update_corner(p, 1, 1, trans_prob)
@@ -307,20 +309,20 @@ end
 ### ================================== ###
 
 N = parse(Int, ARGS[1])
-ϵ_v = parse(Float64, ARGS[2])
+ϵ_h = parse(Float64, ARGS[2])
 # ϵ_h = parse(Float64, ARGS[2])
 T = parse(Int, ARGS[3]) # integration time steps
 rep = parse(Int, ARGS[4])
 
 # N = 256
-# ϵ_v = 0.0
+# ϵ_v = 0.25
 # # ϵ_h = parse(Float64, ARGS[2])
 # T = 3
 # rep = 1
 
 # bias intensity
 # ϵ_v = 1.0
-ϵ_h = ϵ_v
+ϵ_v = ϵ_h
 
 ### ================================== ###
 
@@ -338,7 +340,9 @@ pos_file = open(output_path * "/DATA/data_N_$(N)/data_eh_$(ϵ_h)_ev_$(ϵ_v)/pos_
 # N = 256
 
 # initial density
-ρ_0 = 2.0
+# ρ_0 = 2.0
+ρ_0 = 0.5
+# ρ_0 = 0.5
 
 # time steps
 # T = convert(Int, exp10(4))
@@ -353,14 +357,15 @@ trans_prob = [
     cumsum(fill(1./n, 5)), # bulk (unbiased)
     cumsum([(1.-ϵ_h)/n, 1./n, 1./n, 1./n, (1.+ϵ_h)/n]), # left and right bias
     cumsum([(1.-ϵ_v)/n, 1./n, 1./n, 1./n, (1.+ϵ_v)/n]), # up and down bias
-    cumsum([(1.-ϵ_h)/n, (1.+ϵ_h)/n, 1./n, (1.-ϵ_v)/n, (1.+ϵ_v)/n]) ] # corner bias
+    cumsum([(1.-ϵ_h)/n, (1.-ϵ_v)/n, 1./n, (1.+ϵ_h)/n, (1.+ϵ_v)/n]) ] # corner bias
 
 ### ================================== ###
 # initalization space
 L = convert(Int, ceil(sqrt(N/ρ_0)))
 
 # inital particles' positions
-pos = [[rand(1:L), rand(1:L)] for i in 1:N]
+# pos = [[rand(1:L), rand(1:L)] for i in 1:N]
+pos = [[rand(-div(L,2):div(L,2)), rand(-div(L,2):div(L,2))] for i in 1:N]
 
 # indices of particles in boundaries, corners and bulk
 # 1 -> left boundary
@@ -387,7 +392,7 @@ for i in 1:(length(times) - 1)
             sys_step(pos, trans_prob, bounds)
 
             if t % times[i] == 0 || t % times[i-1] == 0
-                # println("//////// ", t)
+                println("//////// ", t)
                 write(pos_file, vcat(pos...))
             end
         end
@@ -399,7 +404,7 @@ for i in 1:(length(times) - 1)
             sys_step(pos, trans_prob, bounds)
 
             if t % times[i] == 0
-                # println("//////// ", t)
+                println("//////// ", t)
                 write(pos_file, vcat(pos...))
             end
         end
