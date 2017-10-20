@@ -4,29 +4,35 @@ using Plots, CollectiveDynamics.DataAnalysis
 
 ### ================================== ###
 
-T = 6
+N = parse(Int, ARGS[1])
+ϵ = ARGS[2]
+
+### ================================== ###
+
+# T = 6
 T = 4
 times = get_times(T)
 
-ϵ = "0.0"
-ϵ = "0.01"
-ϵ = "0.05"
-ϵ = "0.1"
-ϵ = "0.25"
-ϵ = "0.5"
+# ϵ = "0.0"
+# ϵ = "0.01"
+# ϵ = "0.05"
+# ϵ = "0.1"
+# ϵ = "0.25"
+# ϵ = "0.5"
 
 ### ================================== ###
 
-N = 128
-N = 256
-N = 512
-N = 1024
-N = 2048
-N = 4096
+# N = 128
+# N = 256
+# N = 512
+# N = 1024
+# N = 2048
+# N = 4096
 
 ### ================================== ###
 
-output_path = "$(homedir())/GitRepos/LatticeSwarm.jl/graphs"
+# output_path = "$(homedir())/GitRepos/LatticeSwarm.jl/graphs"
+output_path = "$(homedir())/graphs/LatticeSwarm"
 
 make_dir_from_path(output_path)
 make_dir_from_path(output_path*"/r_2D_t")
@@ -43,6 +49,8 @@ data_path = "$(homedir())/art_DATA/LS_2D/DATA/data_N_$(N)/data_eh_$(ϵ)_ev_$(ϵ)
 # raw_data = reinterpret(Int, read(data_path*"/"*rand(readdir(data_path))))
 
 k = 1
+
+pyplot()
 
 p = [plot() for i in 1:length(readdir(data_path))]
 # t_plots = Any[]
@@ -93,14 +101,13 @@ end
 plot(p..., size = (1024, 720))
 png(output_path*"/r_2D_t/trays_2D/trays_N_$(N)_eh_$(ϵ)_ev_$(ϵ)")
 
-display(p[1])
-
-png(output_path*"/r_2D_t/trays_2D/trays_N_$(N)_eh_$(ϵ)_ev_$(ϵ)_$(k)")
+# display(p[1])
+# png(output_path*"/r_2D_t/trays_2D/trays_N_$(N)_eh_$(ϵ)_ev_$(ϵ)_$(k)")
 
 ### ================================== ###
 
-pyplot()
-gr()
+# pyplot()
+# gr()
 
 p = plot()
 
@@ -136,19 +143,9 @@ fh = histogram2d(vcat(f_x_pos...), vcat(f_y_pos...))
 
 h = plot(ih, fh, size = (1024,720), aspect_ratio = :equal)
 
+xlabel!(h, "x")
+ylabel!(h, "y")
+
 png(output_path*"/r_2D_t/2D_hist_N_$(N)_e_$(ϵ)")
-
-histogram!(p, raw_data, norm = true, label = "pos inicial")
-# ip_data = reshape(raw_data, 2N, div(length(raw_data), 2N))
-
-raw_data = reinterpret(Int, read(data_path*"/"*fp_files[i]))
-histogram!(p, raw_data, norm = true, label = "pos final")
-# fp_data = reshape(raw_data, 2N, div(length(raw_data), 2N))
-
-xlabel!(p, "t")
-ylabel!(p, "r")
-title!("N = $(N), sesgo = $(vals[i])")
-savefig(p, output_path*"/pos_hist"*"/hist_N_$(N)_e_$(vals[i]).png")
-
 
 ### ================================== ###
