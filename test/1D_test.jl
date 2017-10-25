@@ -112,6 +112,8 @@ make_dir_from_path(output_path*"/DATA/data_N_$(N)/data_e_$(ϵ)")
 
 pos_file = open(output_path * "/DATA/data_N_$(N)/data_e_$(ϵ)/pos_$(rep).dat", "w+")
 
+println("file created")
+
 ### ================================== ###
 # number of walkers
 # N = 256
